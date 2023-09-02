@@ -49,7 +49,7 @@ export default function SignUp(){
                     />
                     <Button>Cadastrar</Button>
                 </Form>
-                <Link to={"/"}>
+                <Link to={"/login"}>
                     <p>Já possui uma conta? Faça login!</p>
                 </Link>
             </Container>
