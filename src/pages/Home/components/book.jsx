@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default function Book({ nome, imge, preco }) {
+export default function Book({ nome, imge, preco, vale }) {
   function handleBuyClick() {
     alert('Comprou, confia!');
   }
@@ -12,7 +12,9 @@ export default function Book({ nome, imge, preco }) {
         <p>{nome}</p>
         <div className="bottom">
           <span>R${preco}</span>
-          <button onClick={handleBuyClick}>Comprar</button>
+          {vale? 
+          <button onClick={handleBuyClick}>Comprar</button> : 
+          <button>Comprar</button> }
         </div>
       </div>
     </Livro>
@@ -21,6 +23,8 @@ export default function Book({ nome, imge, preco }) {
 
 const Livro = styled.div`
   .book {
+    max-width: 210px;
+    max-height: 390px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,7 +35,7 @@ const Livro = styled.div`
 
     img {
       max-width: 100%;
-      height: auto;
+      height: 300px;
       max-width: 200px; /* Largura máxima da imagem */
       max-height: 300px; /* Altura máxima da imagem */
     }
