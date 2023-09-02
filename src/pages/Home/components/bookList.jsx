@@ -6,6 +6,11 @@ import { useRef } from "react"
 export default function BookList() {
     const scrollContainerRef = useRef(null);
 
+    const books = [
+        {img: "https://encurtador.com.br/ghkpI", name: "O pequeno principe", price: 12.99, seccion: "topplus"},
+        {img: "https://encurtador.com.br/ghkpI", name: "O pequeno principe", price: 12.99, seccion: "topplus"}
+    ]
+
     const handleScroll = (scrollAmount) => {
         if (scrollContainerRef.current) {
         scrollContainerRef.current.scrollLeft += scrollAmount;
@@ -14,14 +19,17 @@ export default function BookList() {
     return (
         <BookListContainer>
             <div className="book-list" ref={scrollContainerRef}>
+                {books.map((x) => {
+                    return <Book imge={x.img} nome={x.name} preco={x.price}/>
+                })}
+                {/* <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
                 <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
                 <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
                 <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
                 <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
                 <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
                 <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
-                <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
-                <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book>
+                <Book imge="https://encurtador.com.br/ghkpI" nome="O pequeno principe" preco="12,99"></Book> */}
             </div>
             {/* <button onClick={() => handleScroll(-300)}>Anterior</button>
             <button onClick={() => handleScroll(300)}>Próximo</button> */}
@@ -69,6 +77,7 @@ const BookListContainer = styled.div`
             margin-right: 20px;
         }
     }
+    margin-bottom: 50px;
 `;
 
 const ScrollButton = styled.button`
