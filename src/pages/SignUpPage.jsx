@@ -1,7 +1,50 @@
-import { Link } from "react-router-dom"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
 import styled  from "styled-components"
+import api from "../axiosConfig";
 
 export default function SignUp(){
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPass] = useState('');
+    const [confPass, setConfP] = useState('');
+    const [photo, setPhoto] = useState('');
+    const navigate = useNavigate();
+
+    const handleForm = (event, qual) => {
+        qual(event.target.value);
+        console.log(event.target.value);
+    }
+
+    function cadastrar() {
+        event.preventDefault();
+        if (!name || !email || !password || !confPass || !photo) {
+          alert('Preencha todos os campos');
+          return;
+        }
+        if (password !== confPass) {
+          alert("Senhas diferentes");
+          return;
+        }
+
+        const objt = {
+          name,
+          email,
+          password,
+          photo
+        }
+    
+        api.post(`cadastro`, objt)
+          .then((res) => {
+            console.log(res);
+            navigate('/login')
+          })
+          .catch((err) => {
+            console.log(err);
+            alert(err.response.data);
+          })
+      }
+
     return(
         <Body>
             <SideBarr>
@@ -9,12 +52,14 @@ export default function SignUp(){
                 <img />
             </SideBarr>
             <Container>
-                <Form>
+                <Form onSubmit={cadastrar}>
                     <Input 
                         required 
                         type="text" 
                         placeholder="digite seu nome" 
                         name="name"
+                        value={name}
+                        onChange={() => handleForm(event, setName)}
                     />
 
                     <Input 
@@ -23,6 +68,8 @@ export default function SignUp(){
                         placeholder="Digite seu e-mail" 
                         autoComplete="username" 
                         name="email"
+                        value={email}
+                        onChange={() => handleForm(event, setEmail)}
                     />
 
                     <Input 
@@ -31,6 +78,8 @@ export default function SignUp(){
                         placeholder="Digite sua senha" 
                         autoComplete="new-password" 
                         name="password"
+                        value={password}
+                        onChange={() => handleForm(event, setPass)}
                     />
 
                     <Input 
@@ -39,6 +88,8 @@ export default function SignUp(){
                         placeholder="Confirme sua senha" 
                         autoComplete="new-password" 
                         name="password"
+                        value={confPass}
+                        onChange={() => handleForm(event, setConfP)}
                     />
 
                     <Input 
@@ -46,6 +97,8 @@ export default function SignUp(){
                         type="text" 
                         placeholder="Insira a url da imagem" 
                         name="photo"
+                        value={photo}
+                        onChange={() => handleForm(event, setPhoto)}
                     />
                     <Button>Cadastrar</Button>
                 </Form>
