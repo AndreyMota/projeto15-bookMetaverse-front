@@ -54,12 +54,6 @@ const cartItems = [
 export default function Cart({ openCart, setOpenCart }) {
     const navigate = useNavigate();
 
-    // const config = {
-    //     headers: {
-    //       Authorization: `Bearer ${JSON.parse(localStorage.getItem("userData")).token}`
-    //     }
-    // };
-
     function deleteItem(item) {
         // const body = { userId };
         // api.delete(`cart/${item._id}`, body, config)
@@ -151,9 +145,12 @@ const CartScreen = styled.div`
 `;
 
 const PageBlur = styled.div`
-    background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 `;
 
 const CartSideBar = styled.div`

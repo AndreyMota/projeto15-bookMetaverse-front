@@ -52,7 +52,7 @@ const BookListContainer = styled.div`
         overflow-x: scroll;
         gap: 20px;
         padding: 20px;
-        background-color: #f2f2f2;
+        background-color: #FFF0F5;
         border-radius: 10px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         max-width: 100%;

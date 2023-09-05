@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
 import api from "../../axiosConfig.js";
 import BookList from "./components/bookList";
+import Fab from '@mui/material/Fab';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ListIcon from '@mui/icons-material/List';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Cart from "./Cart";
 import styled from "styled-components";
 
@@ -59,8 +64,18 @@ export default function HomePage() {
         <header>
           <h1>BookMetaverse</h1>
           <NavButtons>
-            <button onClick={() => setOpenCart(true)}>Carrinho</button>
-            <button onClick={handleLogOut}>LogOut</button>
+            <Fab title="Carrinho" aria-label="carrinho" variant="extended" onClick={() => setOpenCart(true)} size="small" sx={{ boxShadow: "none" }}>
+              <ShoppingCartIcon /> Carrinho
+            </Fab>
+            <Fab title="Compras" aria-label="compras" variant="extended" onClick={() => navigate('/historico')} size="small" sx={{ boxShadow: "none" }}>
+              <ListIcon /> Compras
+            </Fab>
+            <Fab title="Usuário" aria-label="usuario" variant="extended" onClick={() => navigate('/usuario')} size="small" sx={{ boxShadow: "none" }}>
+              <PersonIcon /> Usuário
+            </Fab>
+            <Fab title="Logout" aria-label="logout" variant="extended" onClick={handleLogOut} size="small" sx={{ boxShadow: "none" }}>
+              <LogoutIcon /> Logout
+            </Fab>
           </NavButtons>
         </header>
 
@@ -94,58 +109,57 @@ export default function HomePage() {
   )
 }
 
-const Home = styled.div`
-  margin-top: 90px; /* Espaço para acomodar o cabeçalho fixo */
-  header {
-    position: relative;
-    margin-bottom: 15px;
-    padding: 15px 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 40px;
-    }
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%; /* Fazer o cabeçalho ocupar a largura total da tela */
-    background-color: #fff; /* Adicionar plano de fundo branco */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adicionar sombra para destacar */
-    z-index: 5; /* Certifique-se de que o cabeçalho esteja acima do conteúdo */
-  }
-  h2 {
-    font-size: 1.7em;
-  }
-  .blist {
-    margin-bottom: 200px;
-    /* Adicione margem superior para afastar o conteúdo do cabeçalho */
-    margin-top: 80px;
-  }
-`;
-
 const NavButtons = styled.div`
   position: absolute;
   display: flex;
   justify-content: space-between;
-  width: 200px;
+  width: 500px;
   top: 20px;
   right: 20px;
   button {
-    cursor: pointer;
-    font-size: 20px;
     color: white;
-    display: block;
-    margin: 0 auto;
-    padding: 5px 10px;
     background-color: #DDA0DD;
-    border: none;
-    border-radius: 100px;
-
     &:last-of-type{
-      color: #DDA0DD;
-      background-color: white;
+
     }
+  }
+`;
+
+const Home = styled.div`
+  background-color: #FFF0F5;
+  font-family: 'Mulish', sans-serif;
+  font-size: 18px;
+  /* margin: 70px 0; Espaço para acomodar o cabeçalho fixo */
+  padding: 100px 0 30px;
+
+  header {
+    padding: 15px 0;
+    position: fixed;
+    z-index: 5; /* Certifique-se de que o cabeçalho esteja acima do conteúdo */
+    top: 0;
+    left: 0;
+    width: 100%; /* Fazer o cabeçalho ocupar a largura total da tela */
+    background-color: rgba(221, 160, 221, 0.5); /* Adicionar plano de fundo branco */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); /* Adicionar sombra para destacar */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); 
+
+    h1 {
+      font-family: 'Mulish', sans-serif;
+      font-size: 44px;
+      text-align: center;
+      color:white;
+    }
+  }
+
+  h2 {
+    padding: 0px 20px;
+    font-size: 1.7em;
+  }
+
+  .blist {
+    margin-bottom: 200px;
+    /* Adicione margem superior para afastar o conteúdo do cabeçalho */
+    margin-top: 80px;
   }
 `;

@@ -24,7 +24,7 @@ export default function AddBook() {
     const previa = (event) => {
         event.preventDefault();
         if (!nome || !imge || !preco) {
-            alert('preencha todos os campos');
+            alert('Todos os campos são obrigatórios!');
         }
         const objt = {
             name: nome,
