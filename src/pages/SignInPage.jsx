@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import styled  from "styled-components"
 
-export default function SignUp(){
+export default function SignIn(){
     return(
         <Body>
             <SideBarr>
@@ -81,7 +81,7 @@ const Input = styled.input`
 const Button = styled.button`
     width: 100%;
     height: 35px;
-    border: 1px solid 	#DDA0DD;
+    border: 1px solid #DDA0DD;
     border-radius: 5px;
     background-color: #DDA0DD;
     font-family: 'Mulish', sans-serif;
@@ -104,7 +104,7 @@ const SideBarr = styled.div`
     & h1{
         font-family: 'Mulish', sans-serif;
         font-size: 50px;
-        font-weight: ;
+        /* font-weight: ; */
         color: #FFFFFF;
         margin-bottom: 15px;
     }
