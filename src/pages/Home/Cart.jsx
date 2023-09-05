@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "../../contexts/UserContext";
 import api from "../../axiosConfig";
 import Fab from '@mui/material/Fab';
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,74 +7,33 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import styled from "styled-components";
 
-const cartItems = [
-    {
-        name: "Harry Potter e a Pedra Filosofal",
-        url: "https://m.media-amazon.com/images/I/81ibfYk4qmL.jpg",
-        amount: 1,
-        subtotal: 19.90,
-    },
-    {
-        name: "Harry Potter e a Câmara Secreta",
-        url: "https://m.media-amazon.com/images/I/81jbivNEVML.jpg",
-        amount: 1,
-        subtotal: 29.90,
-    },
-    {
-        name: "Harry Potter e o Prisioneiro de Azkaban",
-        url: "https://m.media-amazon.com/images/I/81u+ljPVifL.jpg",
-        amount: 1,
-        subtotal: 39.90,
-    },
-    {
-        name: "Harry Potter e o Cálice de Fogo",
-        url: "https://m.media-amazon.com/images/I/81nTLN-kz7L.jpg",
-        amount: 1,
-        subtotal: 49.90,
-    },
-    {
-        name: "Harry Potter e a Ordem da Fênix",
-        url: "https://m.media-amazon.com/images/I/81d6ESyPZwL.jpg",
-        amount: 1,
-        subtotal: 59.90,
-    },
-    {
-        name: "Harry Potter e o Enigma do Príncipe",
-        url: "https://m.media-amazon.com/images/I/81yFIh1yoZL.jpg",
-        amount: 1,
-        subtotal: 69.90,
-    },
-    {
-        name: "Harry Potter e as Relíquias da Morte",
-        url: "https://m.media-amazon.com/images/I/81rvO7xcJOL.jpg",
-        amount: 1,
-        subtotal: 79.90,
-    }
-];
+export default function Cart({ openCart, setOpenCart, cartItems, setRefreshCart }) {
+    const { user } = useContext(UserContext);
+    const config = { headers: { Authorization: `Bearer ${user?.token}` } };
 
-export default function Cart({ openCart, setOpenCart }) {
-    const navigate = useNavigate();
-
-    function deleteItem(item) {
-        // const body = { userId };
-        // api.delete(`cart/${item._id}`, body, config)
-        // .then((res) => {
-        //   console.log(res.data);
-        // })
-        // .catch((err) => {
-        //   console.log(err.response.data);
-        // })
+    function putCart(bookId, add) {
+        const body = { bookId, add };
+        api.put('cart', body, config)
+        .then((res) => {
+            setRefreshCart(x => !x);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        })
     }
 
-    function addItem(item) {
-        // const body = { userId };
-        // api.post(`cart/${item._id}`, body, config)
-        // .then((res) => {
-        //   console.log(res.data);
-        // })
-        // .catch((err) => {
-        //   console.log(err.response.data);
-        // })
+    function postOrder(){
+        // if (cartItems.length===0) { return }
+        const body = { };
+        api.post('orders', body, config)
+        .then((res) => {
+            alert("Pedido enviado!");
+            setOpenCart(false);
+            setRefreshCart(x => !x);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        })
     }
 
     return (
@@ -96,20 +56,20 @@ export default function Cart({ openCart, setOpenCart }) {
                                 {cartItems.map((x, i) =>
                                     <CartItem key={i}>
                                         <BookInfo>
-                                            <img src={x.url} />
+                                            <img src={x.img} />
                                             <span>{x.name}</span>
                                         </BookInfo>
                                         <BuyInfo>
                                             <AmountGroup>
                                                 <Fab aria-label="remove"
-                                                    onClick={() => deleteItem(x)}
+                                                    onClick={() => putCart(x.bookId, false)}
                                                     size="small"
                                                     sx={{ backgroundColor: "white", boxShadow: "none" }}>
                                                     <RemoveIcon />
                                                 </Fab>
                                                 {x.amount}
                                                 <Fab aria-label="add"
-                                                    onClick={() => addItem(x)}
+                                                    onClick={() => putCart(x.bookId, true)}
                                                     size="small"
                                                     sx={{ backgroundColor: "white", boxShadow: "none" }}>
                                                     <AddIcon />
@@ -121,10 +81,11 @@ export default function Cart({ openCart, setOpenCart }) {
                                 )}
                             </CartList>
                             <CartInfos>
-                                <div>Subtotal:</div> <div>R$ <span>{cartItems.map(x => x.subtotal).reduce((a, b) => a + b).toFixed(2).replace('.', ',')}</span></div>
+                                <div>Subtotal:</div> 
+                                <div>R$ <span>{(cartItems.length>0? cartItems.map(x => x.subtotal).reduce((a, b) => a + b) : 0).toFixed(2).replace('.', ',')}</span></div>
                             </CartInfos>
 
-                            <FinishButton onClick={() => navigate('/checkout')}>Finalizar Compra</FinishButton>
+                            <FinishButton disabled={cartItems.length===0} onClick={() => postOrder()}>Finalizar Compra</FinishButton>
                         </CartSideBar>
                     </CartScreen >
                     : <></>

@@ -14,7 +14,9 @@ import styled from "styled-components";
 export default function HomePage() {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
+  const [cartItems, setCartItems] = useState([]);
   const [openCart, setOpenCart] = useState(false);
+  const [refreshCart, setRefreshCart] = useState(false);
   const [books, setBooks] = useState([]);
   const [Top, setTop] = useState(false);
   const [HQ, setHQ] = useState(false);
@@ -26,7 +28,7 @@ export default function HomePage() {
 
   // Get Books
   useEffect(() => {
-    api.get('/books')
+    api.get('books')
       .then((res) => {
         // console.log(res);
         setBooks(res.data);
@@ -37,12 +39,21 @@ export default function HomePage() {
 
         })
       })
-      .catch((err) => console.log(err));
+      .catch(err => alert(err.response.request.responseText));
   }, []);
+
+  // Get Cart
+  useEffect(() => {
+    api.get('cart', config)
+      .then((res) => {
+        setCartItems(res.data);
+      })
+      .catch(err => alert(err.response.request.responseText));
+  }, [refreshCart]);
 
   // LogOut
   function handleLogOut() {
-    api.delete(`/logout`, config)
+    api.delete(`logout`, config)
       .then(res => {
         setUser(null);
         delete localStorage.user;
@@ -54,7 +65,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Cart openCart={openCart} setOpenCart={setOpenCart} />
+      <Cart openCart={openCart} setOpenCart={setOpenCart} cartItems={cartItems} setRefreshCart={setRefreshCart} />
       <Home>
         <header>
           <h1>BookMetaverse</h1>
@@ -74,12 +85,17 @@ export default function HomePage() {
           </NavButtons>
         </header>
 
-        {(books.length===0)? <h2>Não há livros disponíveis!</h2> : <></>}
+        {(books.length === 0) ? <h2>Não há livros disponíveis!</h2> : <></>}
         {
           Top ?
             <>
               <h2>Mais vendidos</h2>
-              <BookList books={books} section={'Top'} />
+              <BookList
+                books={books}
+                section={'Top'}
+                setRefreshCart={setRefreshCart}
+                setOpenCart={setOpenCart}
+              />
             </> : null
         }
         {/* A ideia é passar por props uma tag que vai ter em alguns livros, e seccionar as booklists */}
@@ -88,7 +104,12 @@ export default function HomePage() {
           Romance ?
             <>
               <h2>Romance</h2>
-              <BookList books={books} section={'Romance'} />
+              <BookList
+                books={books}
+                section={'Romance'}
+                setRefreshCart={setRefreshCart}
+                setOpenCart={setOpenCart}
+              />
             </> : null
         }
 
@@ -96,7 +117,12 @@ export default function HomePage() {
           HQ ?
             <>
               <h2>Quadrinhos</h2>
-              <BookList books={books} section={'HQ'} />
+              <BookList
+                books={books}
+                section={'HQ'}
+                setRefreshCart={setRefreshCart}
+                setOpenCart={setOpenCart}
+              />
             </> : null
         }
       </Home>

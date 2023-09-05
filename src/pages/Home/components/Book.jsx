@@ -3,15 +3,18 @@ import UserContext from "../../../contexts/UserContext";
 import api from "../../../axiosConfig";
 import styled from "styled-components";
 
-export default function Book({ bookId, name, img, price, toBuy }) {
+export default function Book({ bookId, name, img, price, toBuy, setRefreshCart, setOpenCart }) {
   const { user } = useContext(UserContext);
   const config = { headers: { Authorization: `Bearer ${user?.token}` } };
 
   function handleBuyClick() {
-    const body = { bookId };
-    api.post('add-cart', body, config)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    const body = { bookId, add: true };
+    api.put('cart', body, config)
+      .then(res => {
+        setRefreshCart(x => !x);
+        setOpenCart(true);
+      })
+      .catch(err => alert(err.response.request.responseText));
   }
 
   return (

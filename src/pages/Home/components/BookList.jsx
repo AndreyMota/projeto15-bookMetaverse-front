@@ -2,12 +2,12 @@ import Book from "./Book";
 import { useRef } from "react";
 import styled from "styled-components";
 
-export default function BookList({ books, section}) {
+export default function BookList({ books, section, setRefreshCart, setOpenCart }) {
     const scrollContainerRef = useRef(null);
 
     const handleScroll = (scrollAmount) => {
         if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollLeft += scrollAmount;
+            scrollContainerRef.current.scrollLeft += scrollAmount;
         }
     };
     if (!books) {
@@ -16,26 +16,44 @@ export default function BookList({ books, section}) {
     return (
         <BookListContainer>
             <div className="book-list" ref={scrollContainerRef}>
-            {
-            section
-                ? books.map((x) => {
-                    if (x.section === section) {
-                    return <Book key={x._id} bookId={x._id} img={x.img} name={x.name} price={x.price} toBuy={true} />;
-                    }
-                    return null; // Você pode retornar null para ignorar elementos indesejados
-                })
-                : books.map((x) => (
-                    <Book key={x._id} bookId={x._id} img={x.img} name={x.name} price={x.price} toBuy={true} />
-                ))
-            }
+                {
+                    section
+                        ? books.map((x) => {
+                            if (x.section === section) {
+                                return <Book
+                                    key={x._id}
+                                    bookId={x._id}
+                                    img={x.img}
+                                    name={x.name}
+                                    price={x.price}
+                                    toBuy={true}
+                                    setRefreshCart={setRefreshCart}
+                                    setOpenCart={setOpenCart}
+                                />
+                            }
+                            return null; // Você pode retornar null para ignorar elementos indesejados
+                        })
+                        : books.map((x) => (
+                            <Book
+                                key={x._id}
+                                bookId={x._id}
+                                img={x.img}
+                                name={x.name}
+                                price={x.price}
+                                toBuy={true}
+                                setRefreshCart={setRefreshCart}
+                                setOpenCart={setOpenCart}
+                            />
+                        ))
+                }
             </div>
-            
-            
+
+
             <div className="buttons-f">
                 <ScrollButton onClick={() => handleScroll(-300)} className="sb">Anterior</ScrollButton>
                 <ScrollButton onClick={() => handleScroll(300)} className="sb">Próximo</ScrollButton>
             </div>
-            
+
         </BookListContainer>
     )
 }
