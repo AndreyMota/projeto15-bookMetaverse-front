@@ -22,12 +22,12 @@ export default function BookList({ books, section}) {
             section
                 ? books.map((x) => {
                     if (x.section === section) {
-                    return <Book key={x._id} imge={x.img} nome={x.name} preco={x.price} vale={true} />;
+                    return <Book key={x._id} kay={x._id} imge={x.img} nome={x.name} preco={x.price} vale={true} />;
                     }
                     return null; // Você pode retornar null para ignorar elementos indesejados
                 })
                 : books.map((x) => (
-                    <Book key={x._id} imge={x.img} nome={x.name} preco={x.price} vale={true} />
+                    <Book key={x._id} kay={x._id} imge={x.img} nome={x.name} preco={x.price} vale={true} />
                 ))
             }
             </div>
