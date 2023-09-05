@@ -7,8 +7,9 @@ import { GoPerson } from "react-icons/go";
 import { GoLocation } from "react-icons/go";
 import { PiBookBookmarkLight } from "react-icons/pi";
 import { BsPersonVcard } from "react-icons/bs";
-import ProfilePic from "../assets/profile-pic.svg";
 import EditUser from "../components/EditUser";
+import Fab from '@mui/material/Fab';
+import ArrowCircleLeftOutlinedIcon from '@mui/icons-material/ArrowCircleLeftOutlined';
 import styled from "styled-components";
 
 export default function UserPage() {
@@ -28,19 +29,19 @@ export default function UserPage() {
     const [cities, setCities] = useState("");
     const [genders, setGenders] = useState("");
 
-    // Verificar isso é mesmo necessário, pois os dados do user já vem do Context, que vem do localStorage:
-    // useEffect(() => {
-    //     api.get(`info-usuario`, { headers: { Authorization: localStorage.getItem('token') } })
-    //         .then((res) => {
-    //             const { photo, userName, author, city, genders } = res.data.user;
-    //             setFoto(photo);
-    //             setNameUser(userName);
-    //             setAuthor(author);
-    //             setCities(city);
-    //             setGenders(genders)
-    //         })
-    //         .catch(err => alert(err.response))
-    // }, [updatedUser])
+  
+    useEffect(() => {
+        api.get(`info-usuario`, config)
+            .then((res) => {
+                const { photo, userName, author, city, genders } = res.data;
+                setFoto(photo);
+                setNameUser(userName);
+                setAuthor(author);
+                setCities(city);
+                setGenders(genders)
+            })
+            .catch(err => console.log(err))
+    }, [updatedUser])
 
     return (
         <>
@@ -56,6 +57,11 @@ export default function UserPage() {
                     cities={cities}
                 /> :
                 <Container>
+                    <NavButtons>
+                        <Fab title="Usuário" aria-label="usuario" variant="extended" onClick={() => navigate('/')} size="small" sx={{ boxShadow: "none" }}>
+                            <ArrowCircleLeftOutlinedIcon /> Voltar
+                        </Fab>
+                    </NavButtons>
                     <Banner>
                         <h1>Bem-vindo(a) ao seu perfil!</h1>
                     </Banner>
@@ -156,3 +162,16 @@ const P = styled.p`
     color: #BA55D3;
     margin-bottom: 10px;
 `
+const NavButtons = styled.div`
+  position: absolute;
+  width: 500px;
+  top: 20px;
+  left: 20px;
+  button {
+    color: white;
+    background-color: #DDA0DD;
+    &:last-of-type{
+
+    }
+  }
+`;
