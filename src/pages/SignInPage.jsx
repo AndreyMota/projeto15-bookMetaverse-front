@@ -1,7 +1,31 @@
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom"
 import styled  from "styled-components"
+import api from "../axiosConfig";
+import UserContext from "../contexts/UserContext";
 
 export default function SignUp(){
+    const {setUser} =  useContext(UserContext);
+    const [form, setForm] = useState({email: "", password: ""})
+    const navigate = useNavigate()
+
+    function handleForm(e) {
+        setForm({...form, [e.target.name]: e.target.value})
+    }
+
+    function submitForm(e){
+        e.preventDefault()
+
+        api.post(`login`, form)
+        .then(res => {
+            setUser(res.data)
+            localStorage.setItem("token", res.data.token)
+            navigate("/")
+        })
+        .catch(err => alert(err.response.data))
+    }
+
     return(
         <Body>
             <SideBarr>
@@ -9,13 +33,15 @@ export default function SignUp(){
                 <img />
             </SideBarr>
             <Container>
-                <Form>
+                <Form onSubmit={submitForm}>
                     <Input 
                         required 
                         type="email" 
                         placeholder="Digite seu e-mail" 
                         autoComplete="username" 
                         name="email"
+                        onChange={handleForm}
+                        value={form.email}
                     />
                     <Input 
                         required 
@@ -23,8 +49,10 @@ export default function SignUp(){
                         placeholder="Digite sua senha" 
                         autoComplete="new-password" 
                         name="password"
+                        onChange={handleForm}
+                        value={form.password}
                     />
-                    <Button>Entrar</Button>
+                    <Button type="submit">Entrar</Button>
                 </Form>
                 <Link to={"/cadastro"}>
                     <p>Não possui uma conta? Cadastre-se já!</p>
