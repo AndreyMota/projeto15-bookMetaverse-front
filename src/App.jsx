@@ -9,19 +9,19 @@ import UserPage from "./pages/UserPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
-  const [user,setUser] = useState();
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
 
   return (
     <>
-      <UserContext.Provider value={{user, setUser}}>
+      <UserContext.Provider value={{ user, setUser }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<SignIn />}/>
-            <Route path="/cadastro" element={<SignUp />}/>
-            <Route path="/" element={<HomePage />}/>
-            <Route path="/add-book" element={<AddBook />}/>
-            <Route path="/usuario" element={<UserPage />}/>
-            <Route path="*" element={<NotFoundPage/>}/>
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/cadastro" element={<SignUp />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/usuario" element={<UserPage />} />
+            <Route path="/novo-livro" element={<AddBook />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

@@ -7,5 +7,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ResetStyle />
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
 )

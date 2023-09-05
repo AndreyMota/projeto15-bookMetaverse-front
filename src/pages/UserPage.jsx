@@ -1,72 +1,71 @@
-import styled from "styled-components"
-import { BiEdit } from "react-icons/bi"
-import { GoPerson } from "react-icons/go"
-import { GoLocation } from "react-icons/go"
-import { PiBookBookmarkLight } from "react-icons/pi"
-import { BsPersonVcard } from "react-icons/bs"
-import ProfilePic from "../assets/profile-pic.svg"
-import { useContext, useEffect } from "react"
-import UserContext from "../contexts/UserContext"
-import { useNavigate } from "react-router-dom"
-import api from "../axiosConfig"
-import { useState } from "react"
-import EditUser from "../components/EditUser"
+import { useState, useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
+import api from "../axiosConfig";
+import { BiEdit } from "react-icons/bi";
+import { GoPerson } from "react-icons/go";
+import { GoLocation } from "react-icons/go";
+import { PiBookBookmarkLight } from "react-icons/pi";
+import { BsPersonVcard } from "react-icons/bs";
+import ProfilePic from "../assets/profile-pic.svg";
+import EditUser from "../components/EditUser";
+import styled from "styled-components";
 
-export default function UserPage(){
-    const [isClicked, setIsClicked] = useState(false)
-    const [foto, setFoto] = useState("")
-    const [nameUser, setNameUser] = useState("")
-    const [author, setAuthor] = useState("")
-    const [cities, setCities] = useState("")
-    const [genders, setGenders] = useState("")
-    const [updatedUser, setUpdatedUser] = useState(false)
-    const { user } = useContext(UserContext);
+export default function UserPage() {
     const navigate = useNavigate();
-    useEffect(() => {
-        
-        if(!user || !localStorage.getItem('token'))
-        {
-            navigate('/');
-            return;
-        }
+    const { user } = useContext(UserContext);
 
-        api.get(`info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
-        .then((res)=>{
-            const {photo, userName, author, city, genders} =  res.data.user;
-            setFoto(photo);
-            setNameUser(userName);
-            setAuthor(author);
-            setCities(city);
-            setGenders(genders)
-        })
-        .catch(err => alert(err.response))
-    }, [updatedUser])
+    const [isClicked, setIsClicked] = useState(false)
+    const [updatedUser, setUpdatedUser] = useState(false)
 
+    // Authorization
+    useEffect(() => { if (!user) { navigate("/login") } }, []);
+    const config = { headers: { Authorization: `Bearer ${user?.token}` } };
+
+    const [nameUser, setNameUser] = useState(user?.name);
+    const [foto, setFoto] = useState(user?.photo);
+    const [author, setAuthor] = useState("");
+    const [cities, setCities] = useState("");
+    const [genders, setGenders] = useState("");
+
+    // Não entendi o propósito disso:
+    // useEffect(() => {
+    //     api.get(`info-usuario`, { headers: { Authorization: localStorage.getItem('token') } })
+    //         .then((res) => {
+    //             const { photo, userName, author, city, genders } = res.data.user;
+    //             setFoto(photo);
+    //             setNameUser(userName);
+    //             setAuthor(author);
+    //             setCities(city);
+    //             setGenders(genders)
+    //         })
+    //         .catch(err => alert(err.response))
+    // }, [updatedUser])
 
     return (
         <>
-            {isClicked ? 
-                <EditUser 
-                    setIsClicked={setIsClicked} 
-                    setUpdatedUser={setUpdatedUser} 
+            {isClicked ?
+                <EditUser
+                    setIsClicked={setIsClicked}
+                    setUpdatedUser={setUpdatedUser}
                     updatedUser={updatedUser}
                     foto={foto}
                     nameUser={nameUser}
                     genders={genders}
                     author={author}
                     cities={cities}
-                /> : 
+                /> :
                 <Container>
                     <Banner>
                         <h1>Bem-vindo(a) ao seu perfil!</h1>
                     </Banner>
                     <Profile>
                         <ProfilePicture src={foto} alt="Foto-perfil" />
-                        <P>{nameUser} <GoPerson/> </P>
-                        <P>{cities} <GoLocation/> </P>
-                        <P>{author} <BsPersonVcard/> </P>
+                        <P>{nameUser} <GoPerson /> </P>
+                        <P>{cities} <GoLocation /> </P>
+                        <P>{author} <BsPersonVcard /> </P>
                         <P>{genders} <PiBookBookmarkLight /></P>
-                        <Button onClick={() => setIsClicked(true)}>Editar perfil <BiEdit/></Button>
+                        <Button onClick={() => setIsClicked(true)}>Editar perfil <BiEdit /></Button>
                     </Profile>
                 </Container>
             }

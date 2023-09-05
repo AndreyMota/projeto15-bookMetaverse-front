@@ -1,51 +1,51 @@
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import styled  from "styled-components"
+import { useState, useEffect, useContext } from "react";
 import api from "../axiosConfig";
+import UserContext from "../contexts/UserContext";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-export default function SignUp(){
+export default function SignUp() {
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
+    useEffect(() => { if (user) { navigate("/") } }, []);
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [confPass, setConfP] = useState('');
     const [photo, setPhoto] = useState('');
-    const navigate = useNavigate();
 
     const handleForm = (event, qual) => {
         qual(event.target.value);
-        console.log(event.target.value);
     }
 
     function cadastrar(event) {
         event.preventDefault();
         if (!name || !email || !password || !confPass || !photo) {
-          alert('Preencha todos os campos');
-          return;
+            alert('Preencha todos os campos!');
+            return;
         }
         if (password !== confPass) {
-          alert("Senhas diferentes");
-          return;
+            alert('As senhas não coincidem!');
+            return;
         }
 
         const objt = {
-          name,
-          email,
-          password,
-          photo
+            name,
+            email,
+            password,
+            photo
         }
-    
-        api.post(`cadastro`, objt)
-          .then((res) => {
-            console.log(res);
-            navigate('/login')
-          })
-          .catch((err) => {
-            console.log(err);
-            alert(err.response.data);
-          })
-      }
 
-    return(
+        api.post(`cadastro`, objt)
+            .then((res) => {
+                alert('Conta cadastrada com sucesso!');
+                navigate('/login');
+            })
+            .catch(err => alert(err.response.request.responseText));
+    }
+
+    return (
         <Body>
             <SideBarr>
                 <h1>Cadastre-se e venha aproveitar os nossos livros!</h1>
@@ -53,52 +53,52 @@ export default function SignUp(){
             </SideBarr>
             <Container>
                 <Form onSubmit={event => cadastrar(event)}>
-                    <Input 
-                        required 
-                        type="text" 
-                        placeholder="digite seu nome" 
+                    <Input
+                        required
+                        type="text"
+                        placeholder="Digite seu nome"
                         name="name"
                         value={name}
-                        onChange={() => handleForm(event, setName)}
+                        onChange={(event) => handleForm(event, setName)}
                     />
 
-                    <Input 
-                        required 
-                        type="email" 
-                        placeholder="Digite seu e-mail" 
-                        autoComplete="username" 
+                    <Input
+                        required
+                        type="email"
+                        placeholder="Digite seu e-mail"
+                        autoComplete="username"
                         name="email"
                         value={email}
-                        onChange={() => handleForm(event, setEmail)}
+                        onChange={(event) => handleForm(event, setEmail)}
                     />
 
-                    <Input 
-                        required 
-                        type="password" 
-                        placeholder="Digite sua senha" 
-                        autoComplete="new-password" 
+                    <Input
+                        required
+                        type="password"
+                        placeholder="Digite sua senha"
+                        autoComplete="new-password"
                         name="password"
                         value={password}
-                        onChange={() => handleForm(event, setPass)}
+                        onChange={(event) => handleForm(event, setPass)}
                     />
 
-                    <Input 
-                        required 
-                        type="password" 
-                        placeholder="Confirme sua senha" 
-                        autoComplete="new-password" 
+                    <Input
+                        required
+                        type="password"
+                        placeholder="Confirme sua senha"
+                        autoComplete="new-password"
                         name="password"
                         value={confPass}
-                        onChange={() => handleForm(event, setConfP)}
+                        onChange={(event) => handleForm(event, setConfP)}
                     />
 
-                    <Input 
-                        required 
-                        type="text" 
-                        placeholder="Insira a url da imagem" 
+                    <Input
+                        required
+                        type="url"
+                        placeholder="Insira a url da imagem"
                         name="photo"
                         value={photo}
-                        onChange={() => handleForm(event, setPhoto)}
+                        onChange={(event) => handleForm(event, setPhoto)}
                     />
                     <Button type="submit">Cadastrar</Button>
                 </Form>
