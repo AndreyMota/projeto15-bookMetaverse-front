@@ -1,55 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom"
-import styled  from "styled-components"
 import api from "../axiosConfig";
 import UserContext from "../contexts/UserContext";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
-export default function SignIn(){
-    const {setUser} =  useContext(UserContext);
-    const [form, setForm] = useState({email: "", password: ""})
-    const navigate = useNavigate()
+export default function SignIn() {
+    const navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
+    useEffect(() => { if (user) { navigate("/") } }, []);
 
+    const [form, setForm] = useState({ email: "", password: "" });
     function handleForm(e) {
-        setForm({...form, [e.target.name]: e.target.value})
+        setForm({ ...form, [e.target.name]: e.target.value })
     }
 
-    function submitForm(e){
-        e.preventDefault()
+    function submitForm(e) {
+        e.preventDefault();
 
         api.post(`login`, form)
-        .then(res => {
-            setUser(res.data)
-            localStorage.setItem("token", res.data.token)
-            navigate("/")
-        })
-        .catch(err => alert(err.response.data))
+            .then(res => {
+                setUser(res.data);
+                localStorage.setItem('user', JSON.stringify(res.data));
+                alert("Login Realizado!");
+                navigate('/');
+            })
+            .catch(err => alert(err.response.request.responseText));
     }
 
-    return(
+    return (
         <Body>
             <SideBarr>
                 <h1>Faça login e aproveite as nossas ofertas!</h1>
                 <img />
             </SideBarr>
             <Container>
-                <Form onSubmit={submitForm}>
-                    <Input 
-                        required 
-                        type="email" 
-                        placeholder="Digite seu e-mail" 
-                        autoComplete="username" 
+                <Form onSubmit={e => submitForm(e)}>
+                    <Input
+                        required
+                        type="email"
+                        placeholder="Digite seu e-mail"
+                        autoComplete="username"
                         name="email"
-                        onChange={handleForm}
+                        onChange={e => handleForm(e)}
                         value={form.email}
                     />
-                    <Input 
-                        required 
-                        type="password" 
-                        placeholder="Digite sua senha" 
-                        autoComplete="new-password" 
+                    <Input
+                        required
+                        type="password"
+                        placeholder="Digite sua senha"
+                        autoComplete="new-password"
                         name="password"
-                        onChange={handleForm}
+                        onChange={e => handleForm(e)}
                         value={form.password}
                     />
                     <Button type="submit">Entrar</Button>

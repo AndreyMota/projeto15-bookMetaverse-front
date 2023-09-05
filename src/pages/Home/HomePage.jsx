@@ -1,19 +1,29 @@
-import styled from "styled-components";
-import BookList from "./components/bookList";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../../contexts/UserContext";
 import api from "../../axiosConfig.js";
-import { useState, useEffect } from "react";
+import BookList from "./components/bookList";
 import Cart from "./Cart";
+import styled from "styled-components";
 
 export default function HomePage() {
-  const [openCart, setOpenCart] = useState(true);
+  const navigate = useNavigate();
+  const { user, setUser } = useContext(UserContext);
+  const [openCart, setOpenCart] = useState(false);
   const [books, setBooks] = useState([]);
   const [top, setTop] = useState(false);
   const [twd, setTwd] = useState(false);
   const [rom, setRom] = useState(false);
+
+  // Authorization
+  useEffect(() => { if (!user) { navigate("/login") } }, []);
+  const config = { headers: { Authorization: `Bearer ${user?.token}` } };
+
+  // Get Books
   useEffect(() => {
     api.get('/books')
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setBooks(res.data);
         res.data.forEach((x) => {
           if (x.section === 'twd') setTwd(true);
@@ -25,13 +35,22 @@ export default function HomePage() {
       .catch((err) => console.log(err));
   }, []);
 
-
   if (!books) {
     return (
       <h1>Loading</h1>
     )
   }
 
+  function handleLogOut() {
+    api.delete(`/logout`, config)
+      .then(res => {
+        setUser(null);
+        delete localStorage.user;
+        navigate('/login');
+        alert("LogOut Realizado!");
+      })
+      .catch(err => alert(err.response.request.responseText));
+  }
 
   return (
     <>
@@ -39,6 +58,9 @@ export default function HomePage() {
       <Home>
         <header>
           <h1>BookMetaverse</h1>
+          <LogOutSection>
+            <button onClick={handleLogOut}>LogOut</button>
+          </LogOutSection>
         </header>
 
         {
@@ -74,6 +96,7 @@ export default function HomePage() {
 const Home = styled.div`
   margin-top: 90px; /* Espaço para acomodar o cabeçalho fixo */
   header {
+    position: relative;
     margin-bottom: 15px;
     padding: 15px 0;
     display: flex;
@@ -98,5 +121,22 @@ const Home = styled.div`
     margin-bottom: 200px;
     /* Adicione margem superior para afastar o conteúdo do cabeçalho */
     margin-top: 80px;
+  }
+`;
+
+const LogOutSection = styled.div`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  button {
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+    display: block;
+    margin: 0 auto;
+    padding: 5px;
+    background-color: #DDA0DD;
+    border: none;
+    border-radius: 10px;
   }
 `;

@@ -1,13 +1,21 @@
-import styled from "styled-components";
-import Book from "./Home/components/book";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import UserContext from "../contexts/UserContext";
 import api from "../axiosConfig.js";
+import Book from "./Home/components/book";
+import styled from "styled-components";
 
 export default function AddBook() {
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
     const [nome, setNome] = useState('');
     const [imge, setImge] = useState('');
     const [preco, setPreco] = useState('');
     const [secao, setSecao] = useState('');
+
+    // Authorization
+    useEffect(() => { if (!user) { navigate("/login") } }, []);
+    const config = { headers: { Authorization: `Bearer ${user?.token}` } };
 
     const handleForm = (event, qual) => {
         qual(event.target.value);
@@ -25,12 +33,12 @@ export default function AddBook() {
             section: secao
         }
 
-        api.post('book', objt)
-        .then((res) => {
-            console.log(res);
-            alert(res.data.message);
-        })
-        .catch((err) => console.log(err));
+        api.post('books', objt)
+            .then((res) => {
+                console.log(res);
+                alert(res.data.message);
+            })
+            .catch((err) => console.log(err));
     }
 
     return (
@@ -48,9 +56,9 @@ export default function AddBook() {
                     <button>Enviar</button>
                 </form>
             </div>
-            
+
             <div className="right">
-                <Book nome={nome} imge={imge} preco={preco} vale={false}/>
+                <Book nome={nome} imge={imge} preco={preco} vale={false} />
             </div>
         </AdicionaLivro>
     )
