@@ -7,6 +7,7 @@ import HomePage from "./pages/Home/HomePage";
 import AddBook from "./pages/AddBook";
 import UserPage from "./pages/UserPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import HistoryPage from "./pages/HistoryPage";
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -20,6 +21,7 @@ function App() {
             <Route path="/cadastro" element={<SignUp />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/usuario" element={<UserPage />} />
+            <Route path="/historico" element={<HistoryPage />} />
             <Route path="/novo-livro" element={<AddBook />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

@@ -33,8 +33,8 @@ export default function Book({ bookId, name, img, price, toBuy, setRefreshCart, 
 
 const Livro = styled.div`
   .book {
-    max-width: 210px;
-    max-height: 390px;
+    max-width: 210px; /* 105 */
+    max-height: 390px; /* 150  */
     display: flex;
     flex-direction: column;
     align-items: center;
