@@ -16,7 +16,7 @@ export default function SignUp(){
         console.log(event.target.value);
     }
 
-    function cadastrar() {
+    function cadastrar(event) {
         event.preventDefault();
         if (!name || !email || !password || !confPass || !photo) {
           alert('Preencha todos os campos');
@@ -100,7 +100,7 @@ export default function SignUp(){
                         value={photo}
                         onChange={() => handleForm(event, setPhoto)}
                     />
-                    <Button>Cadastrar</Button>
+                    <Button type="submit">Cadastrar</Button>
                 </Form>
                 <Link to={"/login"}>
                     <p>Já possui uma conta? Faça login!</p>
