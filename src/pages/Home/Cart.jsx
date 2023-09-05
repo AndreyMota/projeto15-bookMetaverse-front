@@ -53,7 +53,7 @@ const cartItems = [
 
 export default function Cart({ openCart, setOpenCart }) {
     const navigate = useNavigate();
-    
+
     // const config = {
     //     headers: {
     //       Authorization: `Bearer ${JSON.parse(localStorage.getItem("userData")).token}`
@@ -113,7 +113,7 @@ export default function Cart({ openCart, setOpenCart }) {
                                                     sx={{ backgroundColor: "white", boxShadow: "none" }}>
                                                     <RemoveIcon />
                                                 </Fab>
-                                                <span>{x.amount}</span>
+                                                {x.amount}
                                                 <Fab aria-label="add"
                                                     onClick={() => addItem(x)}
                                                     size="small"
@@ -147,7 +147,7 @@ const CartScreen = styled.div`
     top: 0px;
     display: flex;
     font-family: 'Mulish', sans-serif;
-    font-size: 24px;
+    font-size: 18px;
 `;
 
 const PageBlur = styled.div`
@@ -163,17 +163,17 @@ const CartSideBar = styled.div`
 `;
 
 const CartHead = styled.div`
-    height: 50px;
-    padding: 25px 15px 10px;
+    padding: 20px 15px 10px;
     display: flex;
     justify-content: space-between;
     h4 {   
         padding-left: 40px;
-        font-size: 35px;
+        font-size: 30px;
         font-weight: 600;
         text-align: center;
     }
-    border-bottom: 1px solid gray;
+    /* border-bottom: 1px solid gray; */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const CartList = styled.ul`
@@ -181,7 +181,7 @@ const CartList = styled.ul`
     width: 95%;
     background-color: white;
     overflow-y: scroll;
-    max-height: calc(100% - 330px);
+    max-height: calc(100% - 300px);
 `;
 
 const CartItem = styled.li`
@@ -208,10 +208,19 @@ const BookInfo = styled.div`
 `;
 
 const BuyInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 125px;
+
+    span{
+        font-size: 20px;
+    }
 `;
 
 const AmountGroup = styled.div`
+    width: 110px;
     background-color: #FFF0F5;
     margin: 5px 0 20px;
     padding: 5px;
@@ -219,11 +228,6 @@ const AmountGroup = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    span {
-        display: block;
-        justify-content: flex-end;
-    }
 `;
 
 const CartInfos = styled.div`
@@ -233,11 +237,14 @@ const CartInfos = styled.div`
     width: 80%;
     color: #DDA0DD;
     border-radius: 10px;
+    font-size: 22px;
+    font-weight: 600;
 `;
 
 const FinishButton = styled.button`
     cursor: pointer;
-    font-size: 25px;
+    font-size: 22px;
+    font-weight: 600;
     color: white;
     display: block;
     margin: 0 auto;

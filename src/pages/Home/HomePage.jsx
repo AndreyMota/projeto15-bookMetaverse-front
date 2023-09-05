@@ -58,9 +58,10 @@ export default function HomePage() {
       <Home>
         <header>
           <h1>BookMetaverse</h1>
-          <LogOutSection>
+          <NavButtons>
+            <button onClick={() => setOpenCart(true)}>Carrinho</button>
             <button onClick={handleLogOut}>LogOut</button>
-          </LogOutSection>
+          </NavButtons>
         </header>
 
         {
@@ -124,8 +125,11 @@ const Home = styled.div`
   }
 `;
 
-const LogOutSection = styled.div`
+const NavButtons = styled.div`
   position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
   top: 20px;
   right: 20px;
   button {
@@ -134,9 +138,14 @@ const LogOutSection = styled.div`
     color: white;
     display: block;
     margin: 0 auto;
-    padding: 5px;
+    padding: 5px 10px;
     background-color: #DDA0DD;
     border: none;
-    border-radius: 10px;
+    border-radius: 100px;
+
+    &:last-of-type{
+      color: #DDA0DD;
+      background-color: white;
+    }
   }
 `;
