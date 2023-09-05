@@ -184,9 +184,4 @@ const SideBarr = styled.div`
         color: #FFFFFF;
         margin-bottom: 15px;
     }
-
-    & img{
-        width: 250px;
-        margin-top: 10px; 
-    }
 `
