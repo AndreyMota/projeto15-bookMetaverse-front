@@ -52,7 +52,7 @@ export default function SignUp(){
                 <img />
             </SideBarr>
             <Container>
-                <Form onSubmit={cadastrar}>
+                <Form onSubmit={event => cadastrar(event)}>
                     <Input 
                         required 
                         type="text" 
@@ -180,7 +180,7 @@ const SideBarr = styled.div`
     & h1{
         font-family: 'Mulish', sans-serif;
         font-size: 50px;
-        font-weight: ;
+        /* font-weight: ; */
         color: #FFFFFF;
         margin-bottom: 15px;
     }
