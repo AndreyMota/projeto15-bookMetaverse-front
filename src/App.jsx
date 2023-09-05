@@ -1,3 +1,5 @@
+import { useState } from "react";
+import UserContext from "./contexts/UserContext";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignIn from "./pages/SignInPage";
 import SignUp from "./pages/SignUpPage";
@@ -7,18 +9,22 @@ import UserPage from "./pages/UserPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
+  const [user,setUser] = useState();
+
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<SignIn />}/>
-          <Route path="/cadastro" element={<SignUp />}/>
-          <Route path="/" element={<HomePage />}/>
-          <Route path="/add-book" element={<AddBook />}/>
-          <Route path="/usuario" element={<UserPage />}/>
-          <Route path="*" element={<NotFoundPage/>}/>
-        </Routes>
-      </BrowserRouter>
+      <UserContext.Provider value={{user, setUser}}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<SignIn />}/>
+            <Route path="/cadastro" element={<SignUp />}/>
+            <Route path="/" element={<HomePage />}/>
+            <Route path="/add-book" element={<AddBook />}/>
+            <Route path="/usuario" element={<UserPage />}/>
+            <Route path="*" element={<NotFoundPage/>}/>
+          </Routes>
+        </BrowserRouter>
+      </UserContext.Provider>
     </>
   )
 }

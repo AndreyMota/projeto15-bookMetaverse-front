@@ -5,22 +5,72 @@ import { GoLocation } from "react-icons/go"
 import { PiBookBookmarkLight } from "react-icons/pi"
 import { BsPersonVcard } from "react-icons/bs"
 import ProfilePic from "../assets/profile-pic.svg"
+import { useContext, useEffect } from "react"
+import UserContext from "../contexts/UserContext"
+import { useNavigate } from "react-router-dom"
+import api from "../axiosConfig"
+import { useState } from "react"
+import EditUser from "../components/EditUser"
 
 export default function UserPage(){
+    const [isClicked, setIsClicked] = useState(false)
+    const [foto, setFoto] = useState("")
+    const [nameUser, setNameUser] = useState("")
+    const [author, setAuthor] = useState("")
+    const [cities, setCities] = useState("")
+    const [genders, setGenders] = useState("")
+    const [updatedUser, setUpdatedUser] = useState(false)
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+    useEffect(() => {
+        
+        if(!user || !localStorage.getItem('token'))
+        {
+            navigate('/');
+            return;
+        }
+
+        api.get(`info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
+        .then((res)=>{
+            const {photo, userName, author, city, genders} =  res.data.user;
+            setFoto(photo);
+            setNameUser(userName);
+            setAuthor(author);
+            setCities(city);
+            setGenders(genders)
+        })
+        .catch(err => alert(err.response))
+    }, [updatedUser])
+
+
     return (
-        <Container>
-            <Banner>
-                <h1>Bem-vindo(a) ao seu perfil!</h1>
-            </Banner>
-            <Profile>
-                <ProfilePicture src={ProfilePic} alt="Foto-perfil" />
-                <P>Nome <GoPerson/> </P>
-                <P>Cidade <GoLocation/> </P>
-                <P>Autores prediletos <BsPersonVcard/> </P>
-                <P>Generos preferidos <PiBookBookmarkLight /></P>
-                <Button>Editar perfil <BiEdit/></Button>
-            </Profile>
-        </Container>
+        <>
+            {isClicked ? 
+                <EditUser 
+                    setIsClicked={setIsClicked} 
+                    setUpdatedUser={setUpdatedUser} 
+                    updatedUser={updatedUser}
+                    foto={foto}
+                    nameUser={nameUser}
+                    genders={genders}
+                    author={author}
+                    cities={cities}
+                /> : 
+                <Container>
+                    <Banner>
+                        <h1>Bem-vindo(a) ao seu perfil!</h1>
+                    </Banner>
+                    <Profile>
+                        <ProfilePicture src={foto} alt="Foto-perfil" />
+                        <P>{nameUser} <GoPerson/> </P>
+                        <P>{cities} <GoLocation/> </P>
+                        <P>{author} <BsPersonVcard/> </P>
+                        <P>{genders} <PiBookBookmarkLight /></P>
+                        <Button onClick={() => setIsClicked(true)}>Editar perfil <BiEdit/></Button>
+                    </Profile>
+                </Container>
+            }
+        </>
     )
 }
 

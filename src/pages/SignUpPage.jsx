@@ -100,7 +100,7 @@ export default function SignUp(){
                         value={photo}
                         onChange={() => handleForm(event, setPhoto)}
                     />
-                    <Button>Cadastrar</Button>
+                    <Button type="submit">Cadastrar</Button>
                 </Form>
                 <Link to={"/login"}>
                     <p>Já possui uma conta? Faça login!</p>

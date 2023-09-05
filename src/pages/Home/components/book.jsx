@@ -1,8 +1,23 @@
 import styled from "styled-components";
+import api from "../../../axiosConfig";
 
-export default function Book({ nome, imge, preco, vale }) {
-  function handleBuyClick() {
-    alert('Comprou, confia!');
+export default function Book({ kay, nome, imge, preco, vale }) {
+  function handleBuyClick(event) {
+    event.preventDefault();
+    alert(preco);
+    alert(typeof(preco));
+    const objt = {
+      id: kay,
+      name: nome,
+      url: imge,
+      amount: 1,
+      subtotal: Number(preco.replace(',', '.'))
+    }
+    api.post('add-cart', objt, {headers: {
+      Authorization: "Bearer 181091f5-973c-4431-abaa-b9023698336c" /* token local */
+    }})
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
   }
 
   return (
