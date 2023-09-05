@@ -2,63 +2,65 @@ import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
 import api from "../axiosConfig.js";
-import Book from "./Home/components/book";
+import Book from "./Home/components/Book";
 import styled from "styled-components";
 
 export default function AddBook() {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
-    const [nome, setNome] = useState('');
-    const [imge, setImge] = useState('');
-    const [preco, setPreco] = useState('');
-    const [secao, setSecao] = useState('');
+    const [formFields, setFormFields] = useState({ name: '', img: '', price: '', section: '' });
 
     // Authorization
     useEffect(() => { if (!user) { navigate("/login") } }, []);
     const config = { headers: { Authorization: `Bearer ${user?.token}` } };
 
-    const handleForm = (event, qual) => {
-        qual(event.target.value);
-    }
-
-    const previa = (event) => {
+    function handleAddBook(event) {
         event.preventDefault();
-        if (!nome || !imge || !preco) {
+        if (!formFields.name || !formFields.img || !formFields.price || !formFields.section) {
             alert('Todos os campos são obrigatórios!');
         }
-        const objt = {
-            name: nome,
-            img: imge,
-            price: preco,
-            section: secao
-        }
 
-        api.post('books', objt)
+        const body = {...formFields, price: Number(formFields.price)};
+        api.post('books', body, config)
             .then((res) => {
-                console.log(res);
-                alert(res.data.message);
+                alert("Livro adicionado à venda!");
             })
-            .catch((err) => console.log(err));
+            .catch(err => alert(err.response.request.responseText));
     }
 
     return (
         <AdicionaLivro>
             <div className="left">
-                <form onSubmit={previa} className="formulario">
+                <form onSubmit={e => handleAddBook(e)} className="formulario">
                     <label>Nome da obra</label>
-                    <input onChange={(event) => handleForm(event, setNome)} value={nome} type="text"></input>
-                    <label>Imagem de capa</label>
-                    <input onChange={(event) => handleForm(event, setImge)} value={imge} type="text"></input>
-                    <label>Preço do produto (xx,xx)(str)</label>
-                    <input onChange={(event) => handleForm(event, setPreco)} value={preco} type="text"></input>
-                    <label>Section (top = mais vendidos/ rom = romance/ twd = quadrinhos)</label>
-                    <input onChange={(event) => handleForm(event, setSecao)} value={secao} type="text"></input>
-                    <button>Enviar</button>
+                    <input
+                        type="text"
+                        onChange={(e) => setFormFields({...formFields, name: e.target.value})}
+                        value={formFields.name} />
+                    <label>Imagem de capa (url)</label>
+                    <input
+                        type="url"
+                        onChange={(e) => setFormFields({...formFields, img: e.target.value})}
+                        value={formFields.img}
+                    />
+                    <label>Preço do produto (float)</label>
+                    <input
+                        type="number"
+                        onChange={(e) => setFormFields({...formFields, price: e.target.value})}
+                        value={formFields.price}
+                    />
+                    <label>Section (Top / Romance / HQ / Didático / Autoajuda)</label>
+                    <input
+                        type="text"
+                        onChange={(e) => setFormFields({...formFields, section: e.target.value})}
+                        value={formFields.section}
+                    />
+                    <button type="submit">Enviar</button>
                 </form>
             </div>
 
             <div className="right">
-                <Book nome={nome} imge={imge} preco={preco} vale={false} />
+                <Book name={formFields.name} img={formFields.img} price={Number(formFields.price)} toBuy={false} />
             </div>
         </AdicionaLivro>
     )

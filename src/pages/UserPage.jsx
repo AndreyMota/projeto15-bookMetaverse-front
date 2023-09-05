@@ -28,7 +28,7 @@ export default function UserPage() {
     const [cities, setCities] = useState("");
     const [genders, setGenders] = useState("");
 
-    // Não entendi o propósito disso:
+    // Verificar isso é mesmo necessário, pois os dados do user já vem do Context, que vem do localStorage:
     // useEffect(() => {
     //     api.get(`info-usuario`, { headers: { Authorization: localStorage.getItem('token') } })
     //         .then((res) => {
@@ -78,7 +78,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     gap: 10px;
-    padding-top: 150px;
+    /* padding-top: 150px; */
     box-sizing: border-box;
     background-color: #D8BFD8;
     height: 100%;
@@ -144,7 +144,7 @@ const Banner = styled.div`
         font-size: 34px;
         font-weight: 700;
         margin-bottom: 10px;
-        font-style: italic;
+        /* font-style: italic; */
         color: #BA55D3;
         text-align: center;
     }

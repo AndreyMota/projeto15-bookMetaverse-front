@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../../contexts/UserContext";
 import api from "../../axiosConfig.js";
-import BookList from "./components/bookList";
+import BookList from "./components/BookList";
 import Fab from '@mui/material/Fab';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ListIcon from '@mui/icons-material/List';
@@ -16,9 +16,9 @@ export default function HomePage() {
   const { user, setUser } = useContext(UserContext);
   const [openCart, setOpenCart] = useState(false);
   const [books, setBooks] = useState([]);
-  const [top, setTop] = useState(false);
-  const [twd, setTwd] = useState(false);
-  const [rom, setRom] = useState(false);
+  const [Top, setTop] = useState(false);
+  const [HQ, setHQ] = useState(false);
+  const [Romance, setRomance] = useState(false);
 
   // Authorization
   useEffect(() => { if (!user) { navigate("/login") } }, []);
@@ -31,21 +31,16 @@ export default function HomePage() {
         // console.log(res);
         setBooks(res.data);
         res.data.forEach((x) => {
-          if (x.section === 'twd') setTwd(true);
-          if (x.section === 'top') setTop(true);
-          if (x.section === 'rom') setRom(true);
+          if (x.section === 'HQ') setHQ(true);
+          if (x.section === 'Top') setTop(true);
+          if (x.section === 'Romance') setRomance(true);
 
         })
       })
       .catch((err) => console.log(err));
   }, []);
 
-  if (!books) {
-    return (
-      <h1>Loading</h1>
-    )
-  }
-
+  // LogOut
   function handleLogOut() {
     api.delete(`/logout`, config)
       .then(res => {
@@ -79,28 +74,29 @@ export default function HomePage() {
           </NavButtons>
         </header>
 
+        {(books.length===0)? <h2>Não há livros disponíveis!</h2> : <></>}
         {
-          top ?
+          Top ?
             <>
               <h2>Mais vendidos</h2>
-              <BookList books={books} section={'top'} />
+              <BookList books={books} section={'Top'} />
             </> : null
         }
         {/* A ideia é passar por props uma tag que vai ter em alguns livros, e seccionar as booklists */}
 
         {
-          rom ?
+          Romance ?
             <>
               <h2>Romance</h2>
-              <BookList books={books} section={'rom'} />
+              <BookList books={books} section={'Romance'} />
             </> : null
         }
 
         {
-          twd ?
+          HQ ?
             <>
               <h2>Quadrinhos</h2>
-              <BookList books={books} section={'twd'} />
+              <BookList books={books} section={'HQ'} />
             </> : null
         }
       </Home>

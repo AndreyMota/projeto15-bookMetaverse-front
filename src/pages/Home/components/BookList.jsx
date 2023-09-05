@@ -1,11 +1,9 @@
-import Book from "./book"
-import { useRef } from "react"
-
-
+import Book from "./Book";
+import { useRef } from "react";
+import styled from "styled-components";
 
 export default function BookList({ books, section}) {
     const scrollContainerRef = useRef(null);
-
 
     const handleScroll = (scrollAmount) => {
         if (scrollContainerRef.current) {
@@ -22,12 +20,12 @@ export default function BookList({ books, section}) {
             section
                 ? books.map((x) => {
                     if (x.section === section) {
-                    return <Book key={x._id} kay={x._id} imge={x.img} nome={x.name} preco={x.price} vale={true} />;
+                    return <Book key={x._id} bookId={x._id} img={x.img} name={x.name} price={x.price} toBuy={true} />;
                     }
                     return null; // Você pode retornar null para ignorar elementos indesejados
                 })
                 : books.map((x) => (
-                    <Book key={x._id} kay={x._id} imge={x.img} nome={x.name} preco={x.price} vale={true} />
+                    <Book key={x._id} bookId={x._id} img={x.img} name={x.name} price={x.price} toBuy={true} />
                 ))
             }
             </div>
@@ -41,10 +39,6 @@ export default function BookList({ books, section}) {
         </BookListContainer>
     )
 }
-
-/*  */
-
-import styled from "styled-components";
 
 const BookListContainer = styled.div`
     .book-list{
@@ -79,7 +73,6 @@ const BookListContainer = styled.div`
     }
     margin-bottom: 50px;
 `;
-
 const ScrollButton = styled.button`
   background-color: #ff6b6b;
   color: #fff;

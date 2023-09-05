@@ -1,35 +1,27 @@
-import styled from "styled-components";
+import { useContext } from "react";
+import UserContext from "../../../contexts/UserContext";
 import api from "../../../axiosConfig";
+import styled from "styled-components";
 
-export default function Book({ kay, nome, imge, preco, vale }) {
-  function handleBuyClick(event) {
-    event.preventDefault();
-    alert(preco);
-    alert(typeof(preco));
-    const objt = {
-      id: kay,
-      name: nome,
-      url: imge,
-      amount: 1,
-      subtotal: Number(preco.replace(',', '.'))
-    }
-    api.post('add-cart', objt, {headers: {
-      Authorization: "Bearer 181091f5-973c-4431-abaa-b9023698336c" /* token local */
-    }})
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+export default function Book({ bookId, name, img, price, toBuy }) {
+  const { user } = useContext(UserContext);
+  const config = { headers: { Authorization: `Bearer ${user?.token}` } };
+
+  function handleBuyClick() {
+    const body = { bookId };
+    api.post('add-cart', body, config)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   }
 
   return (
     <Livro>
       <div className="book">
-        <img src={imge} alt={nome} />
-        <p>{nome}</p>
+        <img src={img} alt={name} />
+        <p>{name}</p>
         <div className="bottom">
-          <span>R${preco}</span>
-          {vale? 
-          <button onClick={handleBuyClick}>Comprar</button> : 
-          <button>Comprar</button> }
+          <span>R$ {price.toFixed(2).replace('.', ',')}</span>
+            <button disabled={!toBuy} onClick={() => handleBuyClick()}>Comprar</button>
         </div>
       </div>
     </Livro>
