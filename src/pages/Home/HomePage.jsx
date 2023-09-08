@@ -30,7 +30,7 @@ export default function HomePage() {
   useEffect(() => {
     api.get('books')
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         setBooks(res.data);
         res.data.forEach((x) => {
           if (x.section === 'HQ') setHQ(true);
@@ -68,7 +68,7 @@ export default function HomePage() {
       <Cart openCart={openCart} setOpenCart={setOpenCart} cartItems={cartItems} setRefreshCart={setRefreshCart} />
       <Home>
         <header>
-          <h1 className="logo">BookMeta<strong>verse</strong></h1>
+          <h1 onClick={() => navigate('/novo-livro')} className="logo">BookMeta<strong>verse</strong></h1>
           <NavButtons>
             <Fab title="Carrinho" aria-label="carrinho" variant="extended" onClick={() => setOpenCart(true)} size="small" sx={{ boxShadow: "none" }}>
               <ShoppingCartIcon /> <p  className="compt">Carrinho</p>
