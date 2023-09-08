@@ -68,19 +68,19 @@ export default function HomePage() {
       <Cart openCart={openCart} setOpenCart={setOpenCart} cartItems={cartItems} setRefreshCart={setRefreshCart} />
       <Home>
         <header>
-          <h1>BookMetaverse</h1>
+          <h1 className="logo">BookMeta<strong>verse</strong></h1>
           <NavButtons>
             <Fab title="Carrinho" aria-label="carrinho" variant="extended" onClick={() => setOpenCart(true)} size="small" sx={{ boxShadow: "none" }}>
-              <ShoppingCartIcon /> Carrinho
+              <ShoppingCartIcon /> <p  className="compt">Carrinho</p>
             </Fab>
             <Fab title="Compras" aria-label="compras" variant="extended" onClick={() => navigate('/historico')} size="small" sx={{ boxShadow: "none" }}>
-              <ListIcon /> Compras
+              <ListIcon /> <p  className="compt">Compras</p>
             </Fab>
             <Fab title="Usuário" aria-label="usuario" variant="extended" onClick={() => navigate('/usuario')} size="small" sx={{ boxShadow: "none" }}>
-              <PersonIcon /> Usuário
+              <PersonIcon /> <p  className="compt">Usuário</p> 
             </Fab>
             <Fab title="Logout" aria-label="logout" variant="extended" onClick={handleLogOut} size="small" sx={{ boxShadow: "none" }}>
-              <LogoutIcon /> Logout
+              <LogoutIcon /> <p  className="compt">Logout</p>
             </Fab>
           </NavButtons>
         </header>
@@ -132,18 +132,26 @@ export default function HomePage() {
 }
 
 const NavButtons = styled.div`
-  position: absolute;
+  /* position: absolute; */
   display: flex;
   justify-content: space-between;
   width: 500px;
-  top: 20px;
-  right: 20px;
+  /* top: 20px;
+  right: 20px; */
+  margin-top: 5px;
+  margin-right: 20px;
   button {
     color: white;
     background-color: #DDA0DD;
     &:last-of-type{
 
     }
+  }
+  @media screen and (max-width: 770px) {
+    .compt {
+      display: none;
+    }
+    width: 250px;
   }
 `;
 
@@ -155,7 +163,10 @@ const Home = styled.div`
   padding: 100px 0 30px;
 
   header {
+    display: flex;
+    justify-content: space-between;
     padding: 15px 0;
+    padding-left: 15px;
     position: fixed;
     z-index: 5; /* Certifique-se de que o cabeçalho esteja acima do conteúdo */
     top: 0;
@@ -168,9 +179,20 @@ const Home = styled.div`
 
     h1 {
       font-family: 'Mulish', sans-serif;
-      font-size: 44px;
+      font-size: 2.45em;
+      /* font-size: 44px; */
       text-align: center;
       color:white;
+    }
+    @media only screen and (max-width: 495px) {
+      .logo {
+        font-size: 30px;
+        margin-right: 5px;
+        strong {
+          display: none;
+        }
+      }
+      align-items: center;
     }
   }
 
